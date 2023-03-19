@@ -106,7 +106,7 @@ results_demog %>%
   group_by(pct_ed_college_all_abovebelow_natl) %>%
   summarize(mean_pct = (mean(pct_r_2020)))
 
-# I used the pipe operator to indicate which table I'm pulling from Then, I used group_by() to group by the counties above and below the national average for college graduates and used summarize() to include information on the mean percent who voted for Trump. The mean for each category was calculated by the mean() function and assigned to the mean_pct object. The results are similar to Florida, with, on average, a majority of people (68.2%) voting for Trump nationally were from counties below the national average for college graduates, while 45% were from those above the national average.
+# I used the pipe operator to indicate which table I'm pulling from. Then, I used group_by() to group by the counties above and below the national average for college graduates and used summarize() to include information on the mean percent who voted for Trump. The mean for each category was calculated by the mean() function and assigned to the mean_pct object. The results are similar to Florida, with, on average, a majority of people (68.2%) voting for Trump nationally were from counties below the national average for college graduates, while 45% were from those above the national average.
 
 
 ```
@@ -117,8 +117,12 @@ Now using the joined datasets above, come up with two groupings you find interes
 
 ```{r}
 
+results_demog %>%
+  filter(state_code == "PA") %>%
+  group_by(pct_race_nonwhite_abovebelow_natl) %>%
+  summarize(mean_pct_r = (mean(pct_r_2020)), mean_pct_d = mean(pct_d_2020))
 
-
+# I used the pipe operator to indicate which table I'm pulling from (results_demog) and filtered by state for PA. Then, I used group_by() to group by the counties above and below the national average for nonwhite individuals and used summarize() to include information on the mean percent who voted for Trump and Biden in 2020. The mean for each category was calculated by the mean() function and assigned to the mean_pct_r object for Republicans and mean_pct_d object for Democrats. The results indicate that most nonwhite individuals above the national average (81.4%) voted for Biden, while most nonwhite individuals below the national average (64.3%) voted for Trump. 
 
 ```
 
@@ -126,7 +130,13 @@ Now using the joined datasets above, come up with two groupings you find interes
 
 ```{r}
 
+results_counties %>%
+  filter(state_code == "PA") %>%
+  group_by(county) %>%
+  summarize(pct_r_2020, pct_d_2020) %>%
+  arrange(desc(pct_d_2020))
 
+# I used the pipe operator to indicate which table I'm pulling from (results_counties) and filtered by state for PA. Then, I used group_by() to group by county and used summarize() to include information on the mean percent who voted for Trump and Biden in 2020. The mean for each category was calculated by the mean() function and assigned to the mean_pct_r object for Republicans and mean_pct_d object for Democrats. Finally, I arranged by the percent who voted for Biden in descending order. The results indicate that, on average, Philadelphia County had the largest portion of votes (81.4%) for Biden, while, on average, Fulton County had the highest share of votes (85.5%) for Trump. 
 
 
 
@@ -138,9 +148,10 @@ Up until now we've joined two tables together. But we actually have three tables
 
 ```{r}
 
+all_tables = inner_join(results_demog, results_counties)
 
+all_tables
 
-
-
+# I inner joined the results_demog table (join of counties_demographics and counties_elexresults) with the results_counties table (join of counties_rural_urban_suburban and counties_elexresults). Therefore, all three tables are joined by matching values from the counties_elexresults table, which is present in both results_demog and results_counties. 
 
 ```
