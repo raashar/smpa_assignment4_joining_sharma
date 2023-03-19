@@ -41,8 +41,14 @@ Join together the election results and urban/suburban/rural tables above, and th
 
 ```{r}
 
+results_counties = inner_join(counties_rural_urban_suburban, counties_elexresults) # I inner joined the tables (joined by matching values in both tables) with the inner_join() function and assigned them to a variable called results_counties
 
+results_counties %>%  
+  filter(state_code == "VA") %>%
+  group_by(rural_urban) %>%
+  summarize(mean_pct = (mean(pct_r_2020)))
 
+# I used the pipe operator to indicate which table I'm pulling from, and I used the filter() function to get VA results only. Then, I used group_by() to group by the rural/urban categories and used summarize() to include information on the mean percent who voted for Trump in each area. The mean for each category was calculated by the mean() function and assigned to the mean_pct object. 
 
 ```
 
@@ -56,8 +62,12 @@ Using the joined election results / urban/suburban/rural table created above:
 
 ```{r}
 
+results_counties %>%  
+  filter(state_code == "VA") %>%
+  group_by(rural_urban) %>%
+  summarize(total_R = sum(winner_2020=="R"), total_D = sum(winner_2020=="D"))
 
-
+# I used the pipe operator to indicate which table I'm pulling from, and I used the filter() function to get VA results only. Then, I used group_by() to group by the rural/urban categories and used summarize() to include totals on how many counties each party won. The total for each category and party was calculated by the sum() function and assigned to total_R for Republicans and total_D for Democrats. 
 
 ```
 
@@ -71,8 +81,14 @@ Join together the election results and demographics tables above, and then use t
 
 ```{r}
 
+results_demog = inner_join(counties_demographics, counties_elexresults)
 
+results_demog %>%  
+  filter(state_code == "FL") %>%
+  group_by(pct_ed_college_all_abovebelow_natl) %>%
+  summarize(mean_pct = (mean(pct_r_2020)))
 
+# I created a new table by inner joining the demographics and election results tables. Next, I used the pipe operator to indicate which table I'm pulling from, and I used the filter() function to get FL results only. Then, I used group_by() to group by the counties above and below the national average for college graduates and used summarize() to include information on the mean percent who voted for Trump in each area. The mean for each category was calculated by the mean() function and assigned to the mean_pct object. The results indicate that, on average, most people (66.7%) voting for Trump in FL were from counties below the national average for college graduates, while 48% were from those above the national average.
 
 ```
 
@@ -86,7 +102,11 @@ Using the joined table you made above:
 
 ```{r}
 
+results_demog %>%
+  group_by(pct_ed_college_all_abovebelow_natl) %>%
+  summarize(mean_pct = (mean(pct_r_2020)))
 
+# I used the pipe operator to indicate which table I'm pulling from Then, I used group_by() to group by the counties above and below the national average for college graduates and used summarize() to include information on the mean percent who voted for Trump. The mean for each category was calculated by the mean() function and assigned to the mean_pct object. The results are similar to Florida, with, on average, a majority of people (68.2%) voting for Trump nationally were from counties below the national average for college graduates, while 45% were from those above the national average.
 
 
 ```
